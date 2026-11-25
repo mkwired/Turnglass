@@ -5,7 +5,7 @@ param(
     [string]$MSBuildPath
 )
 $ErrorActionPreference = 'Stop'
-if (-not $IsWindows) { throw 'The desktop dispatch adapter must be built on Windows.' }
+if ($env:OS -ne 'Windows_NT') { throw 'The desktop dispatch adapter must be built on Windows.' }
 $repositoryRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).ProviderPath
 $projectDirectory = Join-Path $repositoryRoot 'src/Turnglass.DesktopDispatchAdapter'
 $project = Join-Path $projectDirectory 'Turnglass.DesktopDispatchAdapter.vcxproj'
@@ -31,7 +31,7 @@ if (-not $MSBuildPath) {
     }
 }
 if (-not $MSBuildPath -or -not (Test-Path -LiteralPath $MSBuildPath -PathType Leaf)) {
-    throw 'Install Visual Studio C++ Build Tools with MSVC v143 and Windows SDK 10.0.26100.0, or supply -MSBuildPath.'
+    throw 'Install Visual Studio C++ Build Tools with MSVC v143 or a newer compatible toolset and Windows SDK 10.0.26100.0, or supply -MSBuildPath.'
 }
 
 Push-Location $repositoryRoot
@@ -49,17 +49,18 @@ try {
     }
 
     # packages.config fixes versions; this companion file also pins each downloaded archive.
-    $expectedHashes = Get-Content -LiteralPath (Join-Path $projectDirectory 'packages.sha512.json') -Raw | ConvertFrom-Json -AsHashtable
+    $expectedHashes = Get-Content -LiteralPath (Join-Path $projectDirectory 'packages.sha512.json') -Raw | ConvertFrom-Json
     [xml]$packageConfiguration = Get-Content -LiteralPath (Join-Path $projectDirectory 'packages.config') -Raw
     $packages = @($packageConfiguration.packages.package)
-    if ($expectedHashes.Count -ne $packages.Count) { throw 'Native package versions and SHA-512 pins differ.' }
+    if (@($expectedHashes.PSObject.Properties).Count -ne $packages.Count) { throw 'Native package versions and SHA-512 pins differ.' }
     foreach ($package in $packages) {
         $identity = "$($package.id).$($package.version)"
         $archive = Join-Path $projectDirectory "obj/packages/$identity/$identity.nupkg"
-        if (-not $expectedHashes.ContainsKey($identity) -or -not (Test-Path -LiteralPath $archive -PathType Leaf)) {
+        $hashProperty = $expectedHashes.PSObject.Properties[$identity]
+        if ($null -eq $hashProperty -or -not (Test-Path -LiteralPath $archive -PathType Leaf)) {
             throw "Missing restored native package or SHA-512 pin: $identity. Run without -SkipRestore."
         }
-        if ((Get-FileHash -LiteralPath $archive -Algorithm SHA512).Hash -ne $expectedHashes[$identity]) {
+        if ((Get-FileHash -LiteralPath $archive -Algorithm SHA512).Hash -ne $hashProperty.Value) {
             throw "The restored native package does not match its SHA-512 pin: $identity."
         }
     }

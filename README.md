@@ -40,7 +40,7 @@ The default data directory is `%LOCALAPPDATA%\Turnglass`. It contains the SQLite
 
 The desktop client hosts the same Vue interface in WinUI 3/WebView2 and calls the backend services through a generated native host-object bridge. It does not start an HTTP server. Release publishing uses Native AOT; the portable x64 folder includes its .NET and Windows App SDK dependencies and requires the installed [Evergreen WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
 
-Building requires PowerShell 7, .NET 10 SDK, Node.js 24, Visual Studio C++ Build Tools with MSVC v143, and Windows SDK **10.0.26100.0**. From the repository root:
+Building requires Windows PowerShell 5.1 or PowerShell 7, .NET 10 SDK, Node.js 24, Visual Studio C++ Build Tools with MSVC v143 or a newer compatible toolset, and Windows SDK **10.0.26100.0**. From the repository root:
 
 ```powershell
 ./scripts/build-desktop.ps1 -Configuration Debug

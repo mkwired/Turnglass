@@ -38,7 +38,10 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
+    <!-- Prefer the VS 2022 toolset, while allowing newer Visual Studio
+         installations that no longer include it. -->
+    <PlatformToolset Condition="Exists('$(VCTargetsPath)Platforms\$(Platform)\PlatformToolsets\v143\Toolset.props')">v143</PlatformToolset>
+    <PlatformToolset Condition="'$(PlatformToolset)' == '' And Exists('$(VCTargetsPath)Platforms\$(Platform)\PlatformToolsets\v145\Toolset.props')">v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <GenerateManifest>false</GenerateManifest>
     <UseDebugLibraries Condition="'$(Configuration)' == 'Debug'">true</UseDebugLibraries>
@@ -62,7 +65,9 @@
       <AdditionalIncludeDirectories>$(MSBuildProjectDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level4</WarningLevel>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4505;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <!-- CppWinRT's generated WebView2 projection predates the newer
+           dependent-template diagnostic emitted by current MSVC toolsets. -->
+      <DisableSpecificWarnings>4505;4864;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
       <PreprocessorDefinitions>_WINRT_DLL;WIN32_LEAN_AND_MEAN;WINRT_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>

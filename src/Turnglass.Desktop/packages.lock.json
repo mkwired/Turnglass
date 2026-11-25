@@ -421,47 +421,6 @@
         }
       }
     },
-    "net10.0-windows10.0.19041/win-arm64": {
-      "Microsoft.DotNet.ILCompiler": {
-        "type": "Direct",
-        "requested": "[10.0.15, )",
-        "resolved": "10.0.15",
-        "contentHash": "MjeBT/P5YgUuXfwSbI3ms+F5DkQ2+ilynoHE2jA/Kto//MaE/wtP5EveCAL8abpxFGw9tlHNTAV1j60Wh1oLqg==",
-        "dependencies": {
-          "runtime.win-arm64.Microsoft.DotNet.ILCompiler": "10.0.15"
-        }
-      },
-      "Microsoft.Web.WebView2": {
-        "type": "Direct",
-        "requested": "[1.0.4370.26, )",
-        "resolved": "1.0.4370.26",
-        "contentHash": "fCmdjhw8Gg+cbvEkyF+ygObcByFk35WVxTUmLkjSwjhDuLg4V9P7EVPn3rj3g9M2I3WHes/efHS2tIpGX/NCEA=="
-      },
-      "Microsoft.WindowsAppSDK.Foundation": {
-        "type": "Transitive",
-        "resolved": "2.7.0",
-        "contentHash": "20RAdyrhDL5i5T1kHaIWzDf8oDQ8SiKSCuAVje0Y4zFKLO/OSlxoTl2omjl43CEvEbRm7A+T6CxxfjUtj6rTjA==",
-        "dependencies": {
-          "Microsoft.WindowsAppSDK.Base": "[2.7.0, 3.0.0)",
-          "Microsoft.WindowsAppSDK.InteractiveExperiences": "[2.7.0, 3.0.0)"
-        }
-      },
-      "runtime.win-arm64.Microsoft.DotNet.ILCompiler": {
-        "type": "Transitive",
-        "resolved": "10.0.15",
-        "contentHash": "R5cR4TF27iWjau2xstZjzVGR0ateM8MC3RagmxxEXUnAYNbPaLjMspg7Ho1GOPSkIo1+yTS9lK35d1gJ03YlZg=="
-      },
-      "SQLitePCLRaw.lib.e_sqlite3": {
-        "type": "Transitive",
-        "resolved": "2.1.12",
-        "contentHash": "fWi8Dbknuhgg72fWinIdjXVaqO1hHL4YBBwVLnr7e1c9TAZwJ0QE38j9syW1hwx6HaqEVTwI+O07WPdZn8Rp0w=="
-      },
-      "System.Diagnostics.EventLog": {
-        "type": "Transitive",
-        "resolved": "10.0.15",
-        "contentHash": "d1ynyO/BvCyi8SI1m6/xASazxrZm20V/mTDJay4qmL947RsA5MEiMk1JWvafw6JX005VVBAHvjWQP1dRRBvYKw=="
-      }
-    },
     "net10.0-windows10.0.19041/win-x64": {
       "Microsoft.DotNet.ILCompiler": {
         "type": "Direct",
@@ -491,47 +450,6 @@
         "type": "Transitive",
         "resolved": "10.0.15",
         "contentHash": "WEtOJ41ItA7fJ+pqQFYgCmZxiX5d6AByfLWbifqEjyjkfFXmD9/T9V7xTwrvh5OxkJkBhnZsygcdU0Al9MNcVw=="
-      },
-      "SQLitePCLRaw.lib.e_sqlite3": {
-        "type": "Transitive",
-        "resolved": "2.1.12",
-        "contentHash": "fWi8Dbknuhgg72fWinIdjXVaqO1hHL4YBBwVLnr7e1c9TAZwJ0QE38j9syW1hwx6HaqEVTwI+O07WPdZn8Rp0w=="
-      },
-      "System.Diagnostics.EventLog": {
-        "type": "Transitive",
-        "resolved": "10.0.15",
-        "contentHash": "d1ynyO/BvCyi8SI1m6/xASazxrZm20V/mTDJay4qmL947RsA5MEiMk1JWvafw6JX005VVBAHvjWQP1dRRBvYKw=="
-      }
-    },
-    "net10.0-windows10.0.19041/win-x86": {
-      "Microsoft.DotNet.ILCompiler": {
-        "type": "Direct",
-        "requested": "[10.0.15, )",
-        "resolved": "10.0.15",
-        "contentHash": "MjeBT/P5YgUuXfwSbI3ms+F5DkQ2+ilynoHE2jA/Kto//MaE/wtP5EveCAL8abpxFGw9tlHNTAV1j60Wh1oLqg==",
-        "dependencies": {
-          "runtime.win-x86.Microsoft.DotNet.ILCompiler": "10.0.15"
-        }
-      },
-      "Microsoft.Web.WebView2": {
-        "type": "Direct",
-        "requested": "[1.0.4370.26, )",
-        "resolved": "1.0.4370.26",
-        "contentHash": "fCmdjhw8Gg+cbvEkyF+ygObcByFk35WVxTUmLkjSwjhDuLg4V9P7EVPn3rj3g9M2I3WHes/efHS2tIpGX/NCEA=="
-      },
-      "Microsoft.WindowsAppSDK.Foundation": {
-        "type": "Transitive",
-        "resolved": "2.7.0",
-        "contentHash": "20RAdyrhDL5i5T1kHaIWzDf8oDQ8SiKSCuAVje0Y4zFKLO/OSlxoTl2omjl43CEvEbRm7A+T6CxxfjUtj6rTjA==",
-        "dependencies": {
-          "Microsoft.WindowsAppSDK.Base": "[2.7.0, 3.0.0)",
-          "Microsoft.WindowsAppSDK.InteractiveExperiences": "[2.7.0, 3.0.0)"
-        }
-      },
-      "runtime.win-x86.Microsoft.DotNet.ILCompiler": {
-        "type": "Transitive",
-        "resolved": "10.0.15",
-        "contentHash": "SuelwvEl+RkOgLQZSgTqnvwtAzTeJnL3DGi1qkKDGNFZ6ug5InVKapNYVnj6dW0P9GaZDdvr7kvLNdW0BcZVeA=="
       },
       "SQLitePCLRaw.lib.e_sqlite3": {
         "type": "Transitive",

@@ -4,6 +4,7 @@
 **/dist/
 artifacts/
 .local/
+packages/
 **/coverage/
 **/test-results/
 **/playwright-report/

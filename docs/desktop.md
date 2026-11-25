@@ -30,8 +30,8 @@ Use the same absolute directory for the desktop, web, and MCP hosts to share set
 
 Install these build prerequisites on Windows:
 
-- PowerShell 7, .NET 10 SDK, and Node.js 24/npm.
-- Visual Studio or Build Tools with the C++ desktop tools, **MSVC v143** for x64, and **Windows SDK 10.0.26100.0** including its WinRT metadata and tools.
+- Windows PowerShell 5.1 or PowerShell 7, .NET 10 SDK, and Node.js 24/npm.
+- Visual Studio or Build Tools with the C++ desktop tools, **MSVC v143 or a newer compatible toolset** for x64, and **Windows SDK 10.0.26100.0** including its WinRT metadata and tools.
 - Evergreen WebView2 Runtime to launch or test the application.
 
 The desktop does not require Aspire. Open `Turnglass.slnx` in Visual Studio for all application projects and tests, or `Turnglass.Desktop.slnx` for the desktop subset. The solutions record the bridge → native adapter → desktop build order, and the main solution maps the desktop projects to x64. The native project requires Visual Studio MSBuild. `dotnet build Turnglass.Managed.slnf` builds the web/MCP projects and tests without evaluating the C++ project. Use the scripts below for a complete desktop build including frontend assets and native package restoration.

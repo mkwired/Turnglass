@@ -3,6 +3,9 @@
     <TurnglassNativeAdapterDirectory>$(MSBuildThisFileDirectory)../../Turnglass.DesktopDispatchAdapter/</TurnglassNativeAdapterDirectory>
     <TurnglassNativeAdapterScript>$(MSBuildThisFileDirectory)../../../scripts/build-desktop-adapter.ps1</TurnglassNativeAdapterScript>
     <TurnglassPowerShellPath Condition="'$(TurnglassPowerShellPath)' == '' And Exists('$(ProgramW6432)/PowerShell/7/pwsh.exe')">$(ProgramW6432)/PowerShell/7/pwsh.exe</TurnglassPowerShellPath>
+    <!-- PowerShell 7 is preferred, but the adapter script is deliberately
+         compatible with the Windows PowerShell shipped with Windows. -->
+    <TurnglassPowerShellPath Condition="'$(TurnglassPowerShellPath)' == '' And Exists('$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe')">$(SystemRoot)\System32\WindowsPowerShell\v1.0\powershell.exe</TurnglassPowerShellPath>
     <TurnglassPowerShellPath Condition="'$(TurnglassPowerShellPath)' == ''">pwsh</TurnglassPowerShellPath>
     <TurnglassNativeRestoreArgument Condition="'$(RestoreNativeAdapterPackages)' == 'false'">-SkipRestore</TurnglassNativeRestoreArgument>
   </PropertyGroup>
