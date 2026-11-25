@@ -1,0 +1,44 @@
+name: Verify
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install Aspire CLI bundle
+        shell: pwsh
+        run: |
+          $installerPath = Join-Path $env:RUNNER_TEMP 'aspire-install.ps1'
+          Invoke-WebRequest https://aspire.dev/install.ps1 -OutFile $installerPath
+          & $installerPath -Version 17.0.0
+      - name: Build, format, test, and enforce coverage
+        shell: pwsh
+        run: ./scripts/verify.ps1
+      - name: Publish application
+        shell: pwsh
+        run: ./scripts/publish.ps1 -SkipRestore
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-reports
+          path: |
+            artifacts/coverage
+            frontend/coverage
+            frontend/playwright-report
+            frontend/test-results
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-application
+          path: artifacts/publish

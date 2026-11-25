@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="../Turnglass.Core/Turnglass.Core.csproj" />
+    <ProjectReference Include="../Turnglass.Infrastructure/Turnglass.Infrastructure.csproj" />
+    <ProjectReference Include="../Turnglass.ServiceDefaults/Turnglass.ServiceDefaults.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.15" />
+  </ItemGroup>
+  <Target Name="CopyFrontendForPublish" BeforeTargets="ComputeFilesToPublish" Condition="Exists('$(MSBuildProjectDirectory)/../../frontend/dist/index.html')">
+    <ItemGroup>
+      <_FrontendDistFile Include="$(MSBuildProjectDirectory)/../../frontend/dist/**/*" />
+      <ResolvedFileToPublish Include="@(_FrontendDistFile)" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>wwwroot/%(_FrontendDistFile.RecursiveDir)%(_FrontendDistFile.Filename)%(_FrontendDistFile.Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+</Project>

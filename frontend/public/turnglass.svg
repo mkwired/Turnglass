@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>Turnglass</title>
+  <defs>
+    <linearGradient id="tile" x1="8" y1="4" x2="56" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2DD4BF" />
+      <stop offset="1" stop-color="#0DB39E" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#tile)" />
+  <path d="M23 18H41V22C41 26 36 29 32 32C36 35 41 38 41 42V46H23V42C23 38 28 35 32 32C28 29 23 26 23 22V18Z" fill="#E8FFF6" stroke="#073E36" stroke-width="3.5" stroke-linejoin="round" />
+  <path d="M20 16H44M20 48H44" stroke="#073E36" stroke-width="5" stroke-linecap="round" />
+  <path d="M27 23H37L32 28L27 23ZM26 42L32 36L38 42H26Z" fill="#073E36" stroke="#073E36" stroke-linejoin="round" />
+</svg>

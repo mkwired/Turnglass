@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+artifacts/
+.local/
+**/coverage/
+**/test-results/
+**/playwright-report/
+**/playwright-report-desktop/
+.vs/
+*.user
+*.db
+*.db-shm
+*.db-wal
+*.coverage
+TestResults/

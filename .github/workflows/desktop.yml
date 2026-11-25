@@ -1,0 +1,85 @@
+name: Desktop
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  native-aot-windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      TURNGLASS_COPILOT_AUTO_DISCOVER: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Check native build tools
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
+          if (-not (Test-Path -LiteralPath $vswhere)) { throw 'Visual Studio Installer/vswhere is required.' }
+          $installation = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if ($LASTEXITCODE -ne 0 -or -not $installation) { throw 'The runner needs the Visual Studio C++ desktop build tools.' }
+          $toolset = Join-Path $installation 'MSBuild/Microsoft/VC/*/Platforms/x64/PlatformToolsets/v143/Toolset.props'
+          if (-not (Test-Path -Path $toolset)) { throw 'The runner needs the MSVC v143 x64 toolset.' }
+          $sdk = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits/10'
+          foreach ($relative in @('Include/10.0.26100.0/um/Windows.h', 'UnionMetadata/10.0.26100.0/Windows.winmd', 'bin/10.0.26100.0/x64/midlrt.exe')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $sdk $relative))) { throw "The runner needs Windows SDK 10.0.26100.0: missing $relative." }
+          }
+      - name: Ensure Evergreen WebView2 Runtime
+        run: |
+          $ErrorActionPreference = 'Stop'
+          # Runtime detection and silent bootstrapper usage follow Microsoft's distribution guidance:
+          # https://learn.microsoft.com/microsoft-edge/webview2/concepts/distribution
+          function Test-WebView2Runtime {
+            foreach ($key in @(
+              'HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}',
+              'HKCU:\Software\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}'
+            )) {
+              $value = (Get-ItemProperty -LiteralPath $key -Name pv -ErrorAction SilentlyContinue).pv
+              $version = $null
+              if ([version]::TryParse($value, [ref]$version) -and $version -gt [version]'0.0.0.0') { return $true }
+            }
+            return $false
+          }
+          if (-not (Test-WebView2Runtime)) {
+            $installer = Join-Path $env:RUNNER_TEMP 'MicrosoftEdgeWebview2Setup.exe'
+            Invoke-WebRequest 'https://go.microsoft.com/fwlink/p/?LinkId=2124703' -OutFile $installer
+            $signature = Get-AuthenticodeSignature -LiteralPath $installer
+            if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'O=Microsoft Corporation') {
+              throw 'The WebView2 bootstrapper must have a valid Microsoft signature.'
+            }
+            $process = Start-Process -FilePath $installer -ArgumentList '/silent', '/install' -WindowStyle Hidden -Wait -PassThru
+            if ($process.ExitCode -notin @(0, 3010)) { throw "WebView2 setup failed with exit code $($process.ExitCode)." }
+            if (-not (Test-WebView2Runtime)) { throw 'WebView2 Runtime was not detected after setup.' }
+          }
+      - name: Build desktop project directly in Debug
+        run: dotnet build src/Turnglass.Desktop/Turnglass.Desktop.csproj -c Debug -p:RestoreLockedMode=true
+      - name: Publish Native AOT desktop client
+        run: ./scripts/publish-desktop.ps1
+      - name: Verify native backend and desktop flows
+        run: ./scripts/verify-desktop.ps1 -SkipBuild
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-verification-reports
+          path: |
+            frontend/playwright-report-desktop
+            frontend/test-results
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        with:
+          name: turnglass-desktop-win-x64
+          path: artifacts/publish/desktop/win-x64
+          if-no-files-found: error

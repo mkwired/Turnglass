@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishAot>true</PublishAot>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Turnglass.Core/Turnglass.Core.csproj" />
+    <ProjectReference Include="../../src/Turnglass.Infrastructure/Turnglass.Infrastructure.csproj" />
+    <EmbeddedResource Include="../Turnglass.Tests/Fixtures/PreRename/*.db.gz" LogicalName="Legacy.%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

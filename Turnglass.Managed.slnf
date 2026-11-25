@@ -1,0 +1,14 @@
+{
+  "solution": {
+    "path": "Turnglass.slnx",
+    "projects": [
+      "src\\Turnglass.Core\\Turnglass.Core.csproj",
+      "src\\Turnglass.Infrastructure\\Turnglass.Infrastructure.csproj",
+      "src\\Turnglass.Web\\Turnglass.Web.csproj",
+      "src\\Turnglass.Mcp\\Turnglass.Mcp.csproj",
+      "src\\Turnglass.AppHost\\Turnglass.AppHost.csproj",
+      "src\\Turnglass.ServiceDefaults\\Turnglass.ServiceDefaults.csproj",
+      "tests\\Turnglass.Tests\\Turnglass.Tests.csproj"
+    ]
+  }
+}

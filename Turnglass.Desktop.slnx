@@ -1,0 +1,24 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Turnglass.Core/Turnglass.Core.csproj" />
+    <Project Path="src/Turnglass.Infrastructure/Turnglass.Infrastructure.csproj" />
+    <Project Path="src/Turnglass.DesktopBridge/Turnglass.DesktopBridge.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="src/Turnglass.DesktopDispatchAdapter/Turnglass.DesktopDispatchAdapter.vcxproj">
+      <Platform Project="x64" />
+      <BuildDependency Project="src/Turnglass.DesktopBridge/Turnglass.DesktopBridge.csproj" />
+    </Project>
+    <Project Path="src/Turnglass.Desktop/Turnglass.Desktop.csproj">
+      <Platform Project="x64" />
+      <BuildDependency Project="src/Turnglass.DesktopDispatchAdapter/Turnglass.DesktopDispatchAdapter.vcxproj" />
+    </Project>
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Turnglass.Desktop.Tests/Turnglass.Desktop.Tests.csproj" />
+    <Project Path="tests/Turnglass.NativeAotSmoke/Turnglass.NativeAotSmoke.csproj" />
+  </Folder>
+</Solution>

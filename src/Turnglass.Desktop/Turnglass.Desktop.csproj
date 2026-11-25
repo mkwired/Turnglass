@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <PublishAot>true</PublishAot>
+    <IlcTreatWarningsAsErrors>true</IlcTreatWarningsAsErrors>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <OutputPath>bin/$(Configuration)/</OutputPath>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>../../frontend/public/turnglass.ico</ApplicationIcon>
+    <CsWinRTWindowsMetadata>10.0.26100.0</CsWinRTWindowsMetadata>
+    <CsWinRTIncludes>TurnglassDesktopDispatchAdapter</CsWinRTIncludes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="2.7.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4370.26" />
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.3.1" />
+    <ProjectReference Include="../Turnglass.Core/Turnglass.Core.csproj" />
+    <ProjectReference Include="../Turnglass.Infrastructure/Turnglass.Infrastructure.csproj" />
+    <ProjectReference Include="../Turnglass.DesktopBridge/Turnglass.DesktopBridge.csproj" Aliases="DesktopBridgeComponent" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="TurnglassDesktopDispatchAdapter">
+      <HintPath>../Turnglass.DesktopDispatchAdapter/bin/x64/$(Configuration)/TurnglassDesktopDispatchAdapter.winmd</HintPath>
+      <IsWinMDFile>true</IsWinMDFile>
+    </Reference>
+    <Content Include="../Turnglass.DesktopDispatchAdapter/bin/x64/$(Configuration)/Turnglass.DesktopDispatchAdapter.dll" Link="Turnglass.DesktopDispatchAdapter.dll" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../frontend/public/turnglass.ico" Link="Assets/turnglass.ico" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../frontend/dist/**/*" Link="wwwroot/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Import Project="Build/NativeAdapter.targets" />
+  <Target Name="RemoveUnusedManagedWinRTHost" AfterTargets="ComputeFilesToPublish" Condition="'$(PublishAot)' == 'true'">
+    <!-- The component is linked into this native executable and instantiated directly.
+         Its package's CLR activation host is only for separately hosted managed components. -->
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.Filename)' == 'WinRT.Host' Or '%(ResolvedFileToPublish.Filename)' == 'WinRT.Host.Shim' Or '%(ResolvedFileToPublish.Filename)' == 'WinRT.Host.dll' Or '%(ResolvedFileToPublish.Filename)' == 'WinRT.Host.runtimeconfig'" />
+    </ItemGroup>
+  </Target>
+</Project>

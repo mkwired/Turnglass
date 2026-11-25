@@ -1,0 +1,24 @@
+<Project>
+  <PropertyGroup>
+    <TurnglassNativeAdapterDirectory>$(MSBuildThisFileDirectory)../../Turnglass.DesktopDispatchAdapter/</TurnglassNativeAdapterDirectory>
+    <TurnglassNativeAdapterScript>$(MSBuildThisFileDirectory)../../../scripts/build-desktop-adapter.ps1</TurnglassNativeAdapterScript>
+    <TurnglassPowerShellPath Condition="'$(TurnglassPowerShellPath)' == '' And Exists('$(ProgramW6432)/PowerShell/7/pwsh.exe')">$(ProgramW6432)/PowerShell/7/pwsh.exe</TurnglassPowerShellPath>
+    <TurnglassPowerShellPath Condition="'$(TurnglassPowerShellPath)' == ''">pwsh</TurnglassPowerShellPath>
+    <TurnglassNativeRestoreArgument Condition="'$(RestoreNativeAdapterPackages)' == 'false'">-SkipRestore</TurnglassNativeRestoreArgument>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Make native-only edits and missing generated outputs visible to Visual Studio's up-to-date check. -->
+    <UpToDateCheckInput Include="$(TurnglassNativeAdapterDirectory)*.vcxproj;$(TurnglassNativeAdapterDirectory)*.cpp;$(TurnglassNativeAdapterDirectory)*.h;$(TurnglassNativeAdapterDirectory)*.def;$(TurnglassNativeAdapterDirectory)packages.config;$(TurnglassNativeAdapterDirectory)packages.sha512.json;$(TurnglassNativeAdapterScript)" />
+    <UpToDateCheckInput Include="$(MSBuildThisFileDirectory)../../Turnglass.DesktopBridge/bin/$(Configuration)/net10.0-windows10.0.19041.0/win-x64/Turnglass.DesktopBridge.winmd" />
+    <UpToDateCheckOutput Include="$(TurnglassNativeAdapterDirectory)bin/x64/$(Configuration)/Turnglass.DesktopDispatchAdapter.dll;$(TurnglassNativeAdapterDirectory)bin/x64/$(Configuration)/TurnglassDesktopDispatchAdapter.winmd" />
+  </ItemGroup>
+  <!-- The adapter consumes the managed bridge's WinMD, then supplies metadata for
+       C#/WinRT projection generation. Build it before resolving the file reference.
+       C++ requires Visual Studio MSBuild even when this project uses dotnet build. -->
+  <Target Name="BuildTurnglassNativeAdapter"
+          BeforeTargets="ResolveAssemblyReferences"
+          DependsOnTargets="ResolveProjectReferences"
+          Condition="'$(DesignTimeBuild)' != 'true' And '$(BuildingProject)' != 'false'">
+    <Exec Command="&quot;$(TurnglassPowerShellPath)&quot; -NoLogo -NoProfile -NonInteractive -File &quot;$(TurnglassNativeAdapterScript)&quot; -Configuration &quot;$(Configuration)&quot; -SkipBridgeBuild $(TurnglassNativeRestoreArgument)" />
+  </Target>
+</Project>

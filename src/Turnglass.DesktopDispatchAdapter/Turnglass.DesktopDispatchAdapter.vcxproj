@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ImportDirectoryBuildProps>false</ImportDirectoryBuildProps>
+    <ProjectGuid>{A5B1612C-19B1-4B5E-B8AB-F4A7365C2A90}</ProjectGuid>
+    <ProjectName>Turnglass.DesktopDispatchAdapter</ProjectName>
+    <!-- wv2winrt currently requires a flat output namespace for valid generated C++. -->
+    <RootNamespace>TurnglassDesktopDispatchAdapter</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <NativePackagesRoot>$(MSBuildThisFileDirectory)obj\packages\</NativePackagesRoot>
+    <RestoreRepositoryPath>$(NativePackagesRoot)</RestoreRepositoryPath>
+    <RestorePackagesConfig>true</RestorePackagesConfig>
+    <CppWinRTOptimized>true</CppWinRTOptimized>
+    <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
+    <CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
+    <MinimalCoreWin>true</MinimalCoreWin>
+    <AppContainerApplication>false</AppContainerApplication>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.19041.0</WindowsTargetPlatformMinVersion>
+    <WebView2UseWinRT>true</WebView2UseWinRT>
+    <WebView2UseDispatchAdapter>true</WebView2UseDispatchAdapter>
+    <WebView2DispatchAdapterNamespace>$(RootNamespace)</WebView2DispatchAdapterNamespace>
+    <WebView2DispatchAdapterUseJavaScriptCase>false</WebView2DispatchAdapterUseJavaScriptCase>
+    <WebView2DispatchAdapterIncludeFilters>Turnglass.DesktopBridge.NativeBridge</WebView2DispatchAdapterIncludeFilters>
+    <WV2WinRTPlatformReferencesLevel>foundation</WV2WinRTPlatformReferencesLevel>
+  </PropertyGroup>
+  <Import Project="$(NativePackagesRoot)Microsoft.Windows.CppWinRT.3.0.260818.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(NativePackagesRoot)Microsoft.Windows.CppWinRT.3.0.260818.1\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <GenerateManifest>false</GenerateManifest>
+    <UseDebugLibraries Condition="'$(Configuration)' == 'Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)' != 'Debug'">false</UseDebugLibraries>
+    <WholeProgramOptimization Condition="'$(Configuration)' == 'Release'">true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(MSBuildThisFileDirectory)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(MSBuildThisFileDirectory)obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>Turnglass.DesktopDispatchAdapter</TargetName>
+    <LinkIncremental Condition="'$(Configuration)' == 'Debug'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)' != 'Debug'">false</LinkIncremental>
+    <BridgeMetadataPath Condition="'$(BridgeMetadataPath)' == ''">$(MSBuildThisFileDirectory)..\Turnglass.DesktopBridge\bin\$(Configuration)\net10.0-windows10.0.19041.0\win-x64\Turnglass.DesktopBridge.winmd</BridgeMetadataPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4505;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalOptions>%(AdditionalOptions) /bigobj</AdditionalOptions>
+      <PreprocessorDefinitions>_WINRT_DLL;WIN32_LEAN_AND_MEAN;WINRT_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalUsingDirectories>$(WindowsSDK_WindowsMetadata);%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary Condition="'$(Configuration)' == 'Release'">MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)' == 'Debug'">MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <ModuleDefinitionFile>Turnglass.DesktopDispatchAdapter.def</ModuleDefinitionFile>
+      <EnableCOMDATFolding Condition="'$(Configuration)' == 'Release'">true</EnableCOMDATFolding>
+      <EnableCOMDATFolding Condition="'$(Configuration)' != 'Release'">false</EnableCOMDATFolding>
+      <OptimizeReferences Condition="'$(Configuration)' == 'Release'">true</OptimizeReferences>
+      <OptimizeReferences Condition="'$(Configuration)' != 'Release'">false</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
+    <None Include="packages.config" />
+    <None Include="packages.sha512.json" />
+    <None Include="Turnglass.DesktopDispatchAdapter.def" />
+    <Reference Include="$(BridgeMetadataPath)">
+      <IsWinMDFile>true</IsWinMDFile>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(NativePackagesRoot)Microsoft.Windows.CppWinRT.3.0.260818.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(NativePackagesRoot)Microsoft.Windows.CppWinRT.3.0.260818.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(NativePackagesRoot)Microsoft.Windows.ImplementationLibrary.1.0.260126.7\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('$(NativePackagesRoot)Microsoft.Windows.ImplementationLibrary.1.0.260126.7\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="$(NativePackagesRoot)Microsoft.Web.WebView2.1.0.4370.26\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('$(NativePackagesRoot)Microsoft.Web.WebView2.1.0.4370.26\build\native\Microsoft.Web.WebView2.targets')" />
+  </ImportGroup>
+  <Target Name="ValidateAdapterInputs" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(BridgeMetadataPath)')" Text="Build Turnglass.DesktopBridge for $(Configuration)/win-x64 first, or set BridgeMetadataPath to its WinMD." />
+    <Error Condition="!Exists('$(NativePackagesRoot)Microsoft.Windows.CppWinRT.3.0.260818.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="Restore native packages with Visual Studio MSBuild /t:Restore /p:RestorePackagesConfig=true before building." />
+    <Error Condition="!Exists('$(NativePackagesRoot)Microsoft.Windows.ImplementationLibrary.1.0.260126.7\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="The pinned Windows Implementation Library package is missing. Restore native packages first." />
+    <Error Condition="!Exists('$(NativePackagesRoot)Microsoft.Web.WebView2.1.0.4370.26\build\native\Microsoft.Web.WebView2.targets')" Text="The pinned WebView2 package is missing. Restore native packages first." />
+  </Target>
+</Project>
